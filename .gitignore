@@ -1,0 +1,5 @@
+# Ignore Node.js in all folders
+node_modules/
+dist/
+build/
+

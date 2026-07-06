@@ -1,0 +1,12 @@
+{
+  "name": "iracing-odometer-desktop",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^34.x",
+    "iracing-sdk-js": "1.5.0"
+  }
+}
