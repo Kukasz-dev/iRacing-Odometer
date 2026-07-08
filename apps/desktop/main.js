@@ -42,12 +42,25 @@ function startTelemetryLoop(sdk) {
             const telemetry = sdk.getTelemetry();
             const session = sdk.getSessionData();
 
+            if(session) {
+                const trackName = session.WeekendInfo.TrackDisplayName;
+                const trackShortName = session.WeekendInfo.TrackDisplayShortName;
+
+                // Track Name Full and Short
+                console.log(trackName);
+                console.log(trackShortName);
+
+            };
+
             if(telemetry) {
-                console.log("=== STRUKTURA TELEMETRII ===");
-                console.log(Object.keys(telemetry)); 
-                
-                process.exit(0);
+                const myCarIdx = session.DriverInfo.DriverCarIdx;
+                const driverList = session.DriverInfo.Drivers;
+                const myDriverData = driverList.find(driver => driver.CarIdx === myCarIdx);
+
+                // Car Name 
+                console.log(myDriverData.CarScreenName); 
             }
+        
 
             setImmediate(loop);
         } else {
