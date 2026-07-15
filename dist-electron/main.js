@@ -44,8 +44,36 @@ function checkForSim(sdk) {
       console.log("iRacing detected! Start data reading... ");
       clearInterval(interval);
       sdk.startSDK();
+      startTelemetryLoop(sdk);
     }
   }, 1e3);
+}
+function startTelemetryLoop(sdk) {
+  const TIMEOUT = Math.floor(1 / 60 * 1e3);
+  loop();
+  function loop() {
+    if (sdk.waitForData(TIMEOUT)) {
+      const telemetry = sdk.getTelemetry();
+      const session = sdk.getSessionData();
+      if (session) {
+        let trackName = session.WeekendInfo.TrackDisplayName;
+        let trackShortName = session.WeekendInfo.TrackDisplayShortName;
+        console.log(trackName);
+        console.log(trackShortName);
+      }
+      if (telemetry) {
+        const myCarIdx = session.DriverInfo.DriverCarIdx;
+        const driverList = session.DriverInfo.Drivers;
+        const myDriverData = driverList.find((driver) => driver.CarIdx === myCarIdx);
+        console.log(myDriverData.CarScreenName);
+        setImmediate(loop);
+      } else {
+        console.log("Rozłączono z iRacing. Ponowne szukanie symulatora...");
+        checkForSim(sdk);
+      }
+    }
+    loop();
+  }
 }
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {

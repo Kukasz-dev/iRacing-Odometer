@@ -70,6 +70,8 @@ function checkForSim(sdk: any) {
 
 function startTelemetryLoop(sdk: any) {
   const TIMEOUT = Math.floor((1/60) * 1000)
+  
+  loop()
 
   function loop() {
     if(sdk.waitForData(TIMEOUT)) {
@@ -92,12 +94,10 @@ function startTelemetryLoop(sdk: any) {
 
       if(telemetry) {
         const myCarIdx = session.DriverInfo.DriverCarIdx
-        const driverList = session.DriverInfo.driverList
-        
-        if(driverList && myCarIdx !== undefined){
-          const myDriverData = driverList.find((driver: any) => driver.CarIdx === myCarIdx)
-          console.log(myDriverData.CarScreenName)
-        }
+        const driverList = session.DriverInfo.Drivers
+        const myDriverData = driverList.find((driver:any) => driver.CarIdx === myCarIdx)
+
+        console.log(myDriverData.CarScreenName)
 
         setImmediate(loop)
       } else {
